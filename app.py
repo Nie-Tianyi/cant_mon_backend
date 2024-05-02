@@ -1,13 +1,43 @@
-from flask import Flask, Response
+import random
+
+from flask import Flask, Response,request
 import cv2
 
-app = Flask(__name__)
-video_capture = cv2.VideoCapture(0)  # 从默认摄像头获取视频
+# configuration
+app = Flask(__name__)  # flask app
+video_capture = cv2.VideoCapture(0)  # get video stream from default camera
+waiting_time = 0  # seconds
+waiting_people = 0  # number of people waiting
 
 
-def process_video(video):
-    # 将视频转换为灰度
-    gray = cv2.cvtColor(video, cv2.COLOR_BGR2GRAY)
+@app.route('/')
+def home():
+    url = request.url_root
+
+    return f"""
+    This is the backend server of the canteen monitering system.<br>
+    To access the video stream, go to {url}video_feed.<br>
+    To get the estimated waiting time and number of people waiting, go to {url}estimated_waiting_info.
+    """
+
+
+@app.route("/estimated_waiting_info")
+def waiting_info():
+    global waiting_time, waiting_people
+    res = {
+        "waiting_time": waiting_time,  # times measured in seconds
+        "waiting_people": waiting_people  # number of people waiting
+    }
+    return res
+
+
+def process_video(frame):
+    # 将视频转换为灰度, 替换成标记模型处理每一帧
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    # 设置waiting time 和waiting people， 替换成排队人数和预测时间
+    global waiting_time, waiting_people
+    waiting_time = random.randint(0, 100)
+    waiting_people = random.randint(0, 100)
     return gray
 
 

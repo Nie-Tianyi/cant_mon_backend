@@ -7,13 +7,13 @@
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/.venv" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.8 (cant_mon_backend)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.9 (cant_mon_backend)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="TemplatesService">
     <option name="TEMPLATE_FOLDERS">
       <list>
-        <option value="$MODULE_DIR$/../cant_mon_backend\templates" />
+        <option value="$USER_HOME$/cant_mon_backend\templates" />
       </list>
     </option>
   </component>
