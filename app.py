@@ -1,13 +1,16 @@
 import random
 
-from flask import Flask, Response,request
+from flask import Flask, Response, request
+from flask_cors import CORS
 import cv2
 
 # configuration
-app = Flask(__name__)  # flask app
 video_capture = cv2.VideoCapture(0)  # get video stream from default camera
-waiting_time = 0  # seconds
+waiting_time = 0  # minutes
 waiting_people = 0  # number of people waiting
+
+app = Flask(__name__)  # flask app
+CORS(app)
 
 
 @app.route('/')
@@ -25,7 +28,7 @@ def home():
 def waiting_info():
     global waiting_time, waiting_people
     res = {
-        "waiting_time": waiting_time,  # times measured in seconds
+        "waiting_time": waiting_time,  # times measured in minutes
         "waiting_people": waiting_people  # number of people waiting
     }
     return res
@@ -36,7 +39,7 @@ def process_video(frame):
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     # 设置waiting time 和waiting people， 替换成排队人数和预测时间
     global waiting_time, waiting_people
-    waiting_time = random.randint(0, 100)
+    waiting_time = random.randint(0, 30)
     waiting_people = random.randint(0, 100)
     return gray
 
@@ -56,6 +59,14 @@ def video_feed():
                    b'Content-Type: image/jpeg\r\n\r\n' + jpeg.tobytes() + b'\r\n\r\n')
 
     return Response(generate(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    return response
 
 
 if __name__ == '__main__':
