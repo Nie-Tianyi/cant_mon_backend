@@ -36,12 +36,12 @@ def waiting_info():
 
 def process_video(frame):
     # 将视频转换为灰度, 替换成标记模型处理每一帧
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     # 设置waiting time 和waiting people， 替换成排队人数和预测时间
     global waiting_time, waiting_people
-    waiting_time = random.randint(0, 30)
-    waiting_people = random.randint(0, 100)
-    return gray
+    waiting_time = random.randint(0, 30)  # 更新等待时间
+    waiting_people = random.randint(0, 100)  # 更新等待人数
+    return gray_frame  # 返回处理后的帧
 
 
 @app.route('/video_feed')
